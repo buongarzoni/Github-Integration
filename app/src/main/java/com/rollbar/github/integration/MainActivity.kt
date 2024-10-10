@@ -40,9 +40,17 @@ class MainActivity : ComponentActivity() {
                             Text("Log an Error")
                         }
                         Button(
+                            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                            onClick = {
+                                throw RuntimeException("An uncaught RuntimeException")
+                            },
+                        ) {
+                            Text("Throw an Exception")
+                        }
+                        Button(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
-                                throw RuntimeException("An uncaught Exception")
+                                throw Exception("An uncaught Exception")
                             },
                         ) {
                             Text("Throw an Exception")
