@@ -1,3 +1,6 @@
+import com.android.build.api.dsl.ApplicationDefaultConfig
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,6 +21,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        loadApiKeys()
     }
 
     buildTypes {
@@ -37,6 +41,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -68,3 +73,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+private fun ApplicationDefaultConfig.loadApiKeys() {
+    val properties = Properties()
+    properties.load(readKeysStoreFile())
+
+    buildConfigField(
+        type = "String",
+        name = "ROLLBAR_API_KEY",
+        value = properties.getProperty("rollbar_api_key") ?: "",
+    )
+}
+
+private fun readKeysStoreFile() = project.rootProject.file("keys.properties").inputStream()
